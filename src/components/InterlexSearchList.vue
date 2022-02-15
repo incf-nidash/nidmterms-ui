@@ -14,11 +14,12 @@
                     </span>
                 </li>
             </ul>
-            <b-button v-if="broaden" variant="outline-primary" class="broaden" @click="broadenSearch">Broaden Search</b-button>
         </div>
         <div v-else>
             <p class="no-match">No matching terms found!</p>
         </div>
+            <b-button v-if="broaden" variant="outline-primary" class="broaden" @click="broadenSearch">Broaden Search</b-button>
+
     </div>
 </template>
 
@@ -52,6 +53,7 @@
             onTermSelect() {
                 // this.checkedCategories.push(val);
                 // eslint-disable-next-line no-console
+                console.log(11, "on term select")
                 this.$emit('termSelect', this.checkedCategories);
                 this.$emit('saveCheckedConcepts', this.selectedTerm, this.checkedCategories);
             },

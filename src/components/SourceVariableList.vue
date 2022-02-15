@@ -66,10 +66,16 @@
                 //     }
                 // };
                 // search for concepts in NIDM_Concepts first
+                // TODO: is it good link?
                 const resp = await axios.get('https://api.github.com/repos/NIDM-Terms/terms/contents/terms/NIDM_Concepts');
-                const matching_names = _.filter(resp.data, concept => concept.name.search(term) !== -1);
-
-                if (matching_names.length) {
+                // eslint-disable-next-line no-console
+                console.log(33, 'RESP', term);
+                // TODO:  (age vs language)
+                const matching_names = _.filter(resp.data, concept => concept.name.toLowerCase().search(term) !== -1)
+                // .toLowerCase().split(/\s+/).includes(term));
+                // eslint-disable-next-line no-console
+                console.log(33, 'MATCH', matching_names)
+                if (matching_names.length > -1) {
                     const promises = matching_names.map(async (match_term) => {
                         const res = await axios.get(match_term.download_url);
                         return res.data;
@@ -79,12 +85,12 @@
                     this.$emit('termSearchResult', resolved);
                     this.$emit('nidmConceptFound', true);
                     // eslint-disable-next-line no-console
-                    // console.log('NIDM concepts found!!!! ', resolved);
+                    console.log('NIDM concepts found!!!! ', resolved);
                 }
                 else {
                     this.$emit('nidmConceptFound', false);
                     // eslint-disable-next-line no-console
-                    // console.log('NIDM concepts NOT found!!!! ');
+                    console.log('NIDM concepts NOT found!!!! ');
                     // since no matching nidm concepts, now search interlex
                     axios.get(`https://scicrunch.org/api/1/elastic/interlex/term/_search?q=${term}`, {
                         params: {
@@ -105,7 +111,7 @@
                         });
                         this.$emit('termSearchResult', m_list);
                         // eslint-disable-next-line no-console
-                        // console.log('interlex concepts found!!! ', m_list);
+                        console.log('interlex concepts found!!! ', m_list);
                     });
                 }
             },
